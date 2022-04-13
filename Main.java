@@ -1,7 +1,7 @@
 // Student Grading System
 // a JAVA program for grading students
-// Author:
-// Date:
+// Author: Edd
+// Date: 12-04-22
 /////////////////////////////////////////////////////////
 package com.tony.java;
 
