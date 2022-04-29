@@ -1,26 +1,30 @@
 // Student Grading System
 // a JAVA program for grading students
-// Author: Edd
-// Date: 12-04-22
+// Author:
+// Date: 27-04-22
 /////////////////////////////////////////////////////////
 package com.tony.java;
 
 import java.util.Scanner;
 
+
 public class Main {
 
     public static void main(String[] args) {
-        int exam_score;
-        int assessment_score;
-        boolean fees_status;
-        boolean receive_cert = false;
-        boolean exam_failed = false;
-        boolean assessment_failed = false;
-        Scanner student_data;
-        String response_message;
+        boolean examPassed;
+        boolean assessmentPassed;
+        boolean feesStatus;
+        boolean condoned;
+
+        Scanner scannerInput;
+        String alertMessage;
+
+        double[] studentScores = new double[3];
+        String[] studentGrade = new String[1];
 
         // begin program
         while(true) {   // keep program running until student terminates
+            StringBuilder componentMessage = new StringBuilder("Your Grading Results: \n");
             System.out.println("= = = = = = = = = = = = = = = = ");
             System.out.println("STUDENT GRADING SYSTEM");
             System.out.println("= = = = = = = = = = = = = = = = ");
@@ -28,8 +32,8 @@ public class Main {
             System.out.print("Enter Exams Score: ");
             while(true) { // do not end program until valid exams score is provided
                 try {
-                    student_data = new Scanner(System.in);
-                    exam_score = student_data.nextInt();
+                    scannerInput = new Scanner(System.in);
+                    studentScores[0] = scannerInput.nextDouble();
                     break;
                 }
                 catch (Exception e) {
@@ -40,63 +44,101 @@ public class Main {
             System.out.print("Enter Assessment Score: ");
             while(true) { // do not end program until valid assessment score is provided
                 try {
-                    assessment_score = student_data.nextInt();
+                    studentScores[1] = scannerInput.nextDouble();
                     break;
                 }
                 catch (Exception e) {
-                    student_data = new Scanner(System.in);   // reinitialize the scanner
+                    scannerInput = new Scanner(System.in);   // reinitialize the scanner
                     System.out.print("Sorry, enter a valid Assessment Score: ");
                 }
             }
+// total score
+            studentScores[2] = studentScores[0] + studentScores[1];
+            if(studentScores[2] >= 70)
+                studentGrade[0] = "A";
+            else if(studentScores[2] > 59.99)
+                studentGrade[0] = "B";
+            else if(studentScores[2] > 49.99)
+                studentGrade[0] = "C";
+            else if(studentScores[2] > 39.99)
+                studentGrade[0] = "D";
+            else if(studentScores[2] == 39)
+                studentGrade[0] = "D+";
+            else
+                studentGrade[0] = "F";
+// reset variables for other students
+            examPassed = false;
+            assessmentPassed = false;
+            condoned = false;
 
-            System.out.print("Have you paid your fees in full? Enter Y/N: ");
-            String fees_data = student_data.next();
-            fees_status = fees_data.equalsIgnoreCase("Y");
+            System.out.print("Have you paid your fees(GHc100) in full? Enter Y/N: ");
+            String feesData = scannerInput.next();
+            feesStatus = feesData.equalsIgnoreCase("Y");
 
-            // Component Passed block
-            if(exam_score >= 25 && assessment_score >= 15 && fees_status) {
-                receive_cert = true;
-            }
-            else if(exam_score == 24 && assessment_score == 15 && fees_status) { // 39 mark - condoned
-                receive_cert = true;
-            }
-            else if(exam_score == 25 && assessment_score == 14 && fees_status) { // 39 mark - condoned
-                receive_cert = true;
-            }
+            // Check Components Passed / Failed
+            if(studentScores[0] > 34)
+                examPassed = true;
+            if(studentScores[1] > 14)
+                assessmentPassed = true;
+            if(studentScores[2] == 39)
+                condoned = true;
 
-            // Component Failed block
-            if(!receive_cert) {
-                response_message = "SORRY YOU HAVE FAILED.\n - You failed in the following Components: \n";
-                if(exam_score < 24) {
-                    exam_failed = true;   // only exams failed
-                    response_message += " -> Exams Failed\n";
-                }
-                if(assessment_score < 14) {
-                    assessment_failed = true;   // exams and assessment failed
-                    response_message += " -> Assessment Failed\n";
-                }
-                if(!fees_status) {
-                    if(!exam_failed && !assessment_failed) { // he passed but problem with the fees
-                        response_message += " -> You Passed But Fees not Paid in Full";
+            if(examPassed && assessmentPassed && feesStatus) {      // all clear
+                alertMessage = "Congratulations, You have passed and will be AWARDED A CERTIFICATE\n";
+            }
+            else if(condoned && feesStatus) { // 39 mark - condoned and fees paid
+                alertMessage = "Well Done!, You Scored a total of 39 in your Exams and Assessment.\n";
+                alertMessage += "You have been Condoned and will be AWARDED A CERTIFICATE\n";
+            }
+            else {  // failed block
+                alertMessage = "SORRY YOU HAVE FAILED\n";
+                if(studentScores[0] < 35)
+                    examPassed = false;   // exams failed
+                if(studentScores[1] < 15)
+                    assessmentPassed = false;   // assessment failed
+                if(!examPassed && !assessmentPassed)
+                    alertMessage += "Since You failed in both Exams and Assessment, YOU WILL BE REPEATED\n";
+                else
+                    alertMessage += "You failed a Component and so cannot be cleared for this Module\n";
+
+// check fees status
+                if(!feesStatus) {
+                    if(examPassed && assessmentPassed) { // Passed but problem with the fees
+                        alertMessage = "Well Done! You have passed your exams and assessment but will NOT awarded a " +
+                                "Certificate because your fees are not full paid\n";
                     }
                     else {
-                        response_message += " -> Fees Not Paid in Full";
+                        alertMessage += " -> Fees Not Paid in Full";
                     }
                 }
-                if(exam_failed && assessment_failed) {
-                    response_message += "\nSince You failed in both Exams and Assessment, YOU WILL BE REPEATED";
-                }
             }
-            else {
-                response_message = "Congratulations, You have passed your Exams and Assessment\n" +
-                        "YOU HAVE BEEN AWARDED A CERTIFICATE";
-            }
-            System.out.println("\n= = = = = = = = =");
-            System.out.println(" - - RESULTS - -");
-            System.out.println("= = = = = = = = =");
-            System.out.println(response_message);
-            System.out.print("Do You Want To Restart The Grading System? Y/N: ");
-            String repeat = student_data.next();
+// showing which components were passed or failed and show grade
+            if(examPassed)
+                componentMessage.append(" -> Exams Passed: ").append(studentScores[0]).append("\n");
+            else
+                componentMessage.append(" -> Exams Failed: ").append(studentScores[0]).append("\n");
+            if(assessmentPassed)
+                componentMessage.append(" -> Assessment Passed: ").append(studentScores[1]).append("\n");
+            else
+                componentMessage.append(" -> Assessment Failed: ").append(studentScores[1]).append("\n");
+            componentMessage.append(" -> Total Score: ").append(studentScores[2]).append("\n");
+            componentMessage.append(" -> Grade: ").append(studentGrade[0]).append("\n");
+
+            System.out.println("\n= = = = = = = =  = =  = = =");
+            System.out.println("   - - GRADING RESULTS - -");
+            System.out.println("= = = = = = = = = = =  = = ");
+            System.out.println(alertMessage);
+            System.out.println(componentMessage);
+
+// tracking user frequency
+            System.out.println("\n\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
+            System.out.println("      GRADING FREQUENCY\n");
+            System.out.println("- - - - - - - - - - - - - - -\n");
+            System.out.println("Score    Grade     Total\n");
+//            70 – 100 =A, 60 – 69.99 = B, 50 – 59.99 = C, 40 – 49.9 = D, 39 =D+ and below 39 =F
+
+            System.out.print("Do You Want To Grade Another Student? Y/N: ");
+            String repeat = scannerInput.next();
             boolean restart = repeat.equalsIgnoreCase("N");
             if(!restart)
                 System.out.println();
