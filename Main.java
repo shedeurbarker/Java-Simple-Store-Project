@@ -16,6 +16,13 @@ public class Main {
         boolean feesStatus;
         boolean condoned;
 
+        int gradeA = 0;
+        int gradeB = 0;
+        int gradeC = 0;
+        int gradeD = 0;
+        int gradeDPlus = 0;
+        int gradeF = 0;
+
         Scanner scannerInput;
         String alertMessage;
 
@@ -54,18 +61,30 @@ public class Main {
             }
 // total score
             studentScores[2] = studentScores[0] + studentScores[1];
-            if(studentScores[2] >= 70)
+            if(studentScores[2] >= 70) {
                 studentGrade[0] = "A";
-            else if(studentScores[2] > 59.99)
+                gradeA++;
+            }
+            else if(studentScores[2] > 59.99) {
                 studentGrade[0] = "B";
-            else if(studentScores[2] > 49.99)
+                gradeB++;
+            }
+            else if(studentScores[2] > 49.99) {
                 studentGrade[0] = "C";
-            else if(studentScores[2] > 39.99)
+                gradeC++;
+            }
+            else if(studentScores[2] > 39.99) {
                 studentGrade[0] = "D";
-            else if(studentScores[2] == 39)
+                gradeD++;
+            }
+            else if(studentScores[2] == 39) {
                 studentGrade[0] = "D+";
-            else
+                gradeDPlus++;
+            }
+            else {
                 studentGrade[0] = "F";
+                gradeF++;
+            }
 // reset variables for other students
             examPassed = false;
             assessmentPassed = false;
@@ -104,25 +123,25 @@ public class Main {
 // check fees status
                 if(!feesStatus) {
                     if(examPassed && assessmentPassed) { // Passed but problem with the fees
-                        alertMessage = "Well Done! You have passed your exams and assessment but will NOT awarded a " +
+                        alertMessage = "Well Done! You have passed your exams and assessment but will NOT be awarded a " +
                                 "Certificate because your fees are not full paid\n";
                     }
                     else {
-                        alertMessage += " -> Fees Not Paid in Full";
+                        alertMessage += " -> Fees Not Paid in Full\n";
                     }
                 }
             }
 // showing which components were passed or failed and show grade
             if(examPassed)
-                componentMessage.append(" -> Exams Passed: ").append(studentScores[0]).append("\n");
+                componentMessage.append(" -> Exams: ").append(studentScores[0]).append(" -  Passed\n");
             else
-                componentMessage.append(" -> Exams Failed: ").append(studentScores[0]).append("\n");
+                componentMessage.append(" -> Exams: ").append(studentScores[0]).append(" - Failed\n");
             if(assessmentPassed)
-                componentMessage.append(" -> Assessment Passed: ").append(studentScores[1]).append("\n");
+                componentMessage.append(" -> Assessment: ").append(studentScores[1]).append(" - Passed\n");
             else
-                componentMessage.append(" -> Assessment Failed: ").append(studentScores[1]).append("\n");
+                componentMessage.append(" -> Assessment: ").append(studentScores[1]).append(" - Failed\n");
             componentMessage.append(" -> Total Score: ").append(studentScores[2]).append("\n");
-            componentMessage.append(" -> Grade: ").append(studentGrade[0]).append("\n");
+            componentMessage.append(" -> Grade: ").append(studentGrade[0]);
 
             System.out.println("\n= = = = = = = =  = =  = = =");
             System.out.println("   - - GRADING RESULTS - -");
@@ -130,12 +149,18 @@ public class Main {
             System.out.println(alertMessage);
             System.out.println(componentMessage);
 
+
 // tracking user frequency
-            System.out.println("\n\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
-            System.out.println("      GRADING FREQUENCY\n");
-            System.out.println("- - - - - - - - - - - - - - -\n");
-            System.out.println("Score    Grade     Total\n");
-//            70 – 100 =A, 60 – 69.99 = B, 50 – 59.99 = C, 40 – 49.9 = D, 39 =D+ and below 39 =F
+            System.out.println("\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+            System.out.println("      GRADING FREQUENCY");
+            System.out.println("- - - - - - - - - - - - - - -");
+            System.out.println("Score    Grade     Total");
+            System.out.println("70 - 100     A     " + gradeA);
+            System.out.println("60 - 69.99   B     " + gradeB);
+            System.out.println("50 - 59.99   C     " + gradeC);
+            System.out.println("40 - 49.9    D     " + gradeD);
+            System.out.println("Exactly 39   D+    " + gradeDPlus);
+            System.out.println("below 39     F     " + gradeF);
 
             System.out.print("Do You Want To Grade Another Student? Y/N: ");
             String repeat = scannerInput.next();
