@@ -40,8 +40,14 @@ public class Main {
             while(true) { // do not end program until valid exams score is provided
                 try {
                     scannerInput = new Scanner(System.in);
-                    studentScores[0] = scannerInput.nextDouble();
-                    break;
+                    double exams = scannerInput.nextDouble();
+                    if(exams > 70) {
+                        System.out.print("Sorry, Exams Score cannot be more than 70. Try Again: ");
+                    }
+                    else {
+                        studentScores[0] = exams;
+                        break;
+                    }
                 }
                 catch (Exception e) {
                     System.out.print("Sorry, Enter a Valid Exams Score: ");
@@ -51,8 +57,14 @@ public class Main {
             System.out.print("Enter Assessment Score: ");
             while(true) { // do not end program until valid assessment score is provided
                 try {
-                    studentScores[1] = scannerInput.nextDouble();
-                    break;
+                    double assessment = scannerInput.nextDouble();
+                    if(assessment > 30) {
+                        System.out.print("Sorry, Assessment Score cannot be more than 30. Try Again: ");
+                    }
+                    else {
+                        studentScores[1] = assessment;
+                        break;
+                    }
                 }
                 catch (Exception e) {
                     scannerInput = new Scanner(System.in);   // reinitialize the scanner
