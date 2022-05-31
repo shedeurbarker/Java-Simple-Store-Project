@@ -1,6 +1,6 @@
 // HIGH STREET AND MALL BRANCHES
 // a JAVA program for managing 2 stores
-// Author:
+// Author: Godswill
 // Date: 31/5
 /////////////////////////////////////////////////////////
 package com.tony.java;
